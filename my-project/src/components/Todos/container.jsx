@@ -28,12 +28,20 @@ class Todos extends React.Component {
         }
     };
 
-    handleCRemoveTodo = (todoId) => {
-        const { todos } = this.state;
+    handleRemoveTodo = (todoId) => {
         console.log(todoId);
-        const updatedTodos = todos.filter(({ id }) => id !== todoId);
+        const { todos } = this.state;
 
+        const updatedTodos = todos.filter((todo) => todo.id != todoId);
+        console.log(updatedTodos);
         this.setState({ todos: updatedTodos });
+    };
+
+    handleCheckTodo = (todoId, props) => {
+        const { todos } = this.state;
+        /*        const className = "line-through"; */
+        const checkTodo = todos.filter((todo) => todo.id == todoId);
+        console.log(checkTodo.className);
     };
     isEmptyTodo = () => this.state.todos.length === 0;
 
@@ -41,12 +49,13 @@ class Todos extends React.Component {
         <TodosComponent
             OnAddTodo={this.hadleAddTodo}
             OnEnterTodo={this.handleChangeEnterTodo}
-            OnRemoveTodo={this.handleCRemoveTodo}
+            OnRemoveTodo={this.handleRemoveTodo}
             isEmptyTodo={this.isEmptyTodo()}
-            todos={this.state.todos}
+            OnCheckTodo={this.handleCheckTodo}
             {...this.state}
+
             /*  enterTodo={this.state.enterTodo}
-            
+            todos={this.state.todos}
             */
         />
     );

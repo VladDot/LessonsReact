@@ -2,7 +2,6 @@ import React from "react";
 import MainButton from "./ComponentList/MainButton";
 import MainInput from "./ComponentList/MainInput";
 import List from "./ComponentList/List/List";
-import ParentComponent from "./ComponentList/ParentComponent";
 
 /* import List from "./ComponentList/List"; */
 
@@ -11,6 +10,7 @@ const TodosComponent = ({
     OnEnterTodo,
     OnAddTodo,
     OnRemoveTodo,
+    OnCheckTodo,
     isEmptyTodo,
     todos,
 }) => {
@@ -34,9 +34,9 @@ const TodosComponent = ({
                 <List
                     todos={todos}
                     OnRemoveTodo={OnRemoveTodo}
+                    OnCheckTodo={OnCheckTodo}
                 />
             )}
-            <ParentComponent />
         </div>
     );
 };
