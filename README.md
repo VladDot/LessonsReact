@@ -1,2 +1,0 @@
-# LessonsReact
-JavaScript React
