@@ -1,64 +1,78 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import TodosComponent from "./component";
+import useGetData from "../../hooks/useGetData";
 
-class Todos extends React.Component {
-    constructor(props) {
-        super(props);
+const Todos = () => {
+    const [enterTodo, setEnterTodo] = useState("");
+    const [todos, setTodos] = useState([]);
 
-        this.state = {
-            enterTodo: "",
-            todos: [],
-        };
-    }
+    const { data, error, loading } = useGetData(
+        "https://jsonplaceholder.typicode.com/todos"
+    );
 
-    handleChangeEnterTodo = (e) => {
-        this.setState({ enterTodo: e.target.value });
+    /*  useEffect(() => {
+        setTodos(data);
+    }, [data]); */
+
+    const handleChangeEnterTodo = (e) => {
+        setEnterTodo(e.target.value);
     };
 
-    hadleAddTodo = (e) => {
-        const { enterTodo, todos } = this.state;
+    const hadleAddTodo = () => {
         if (enterTodo !== "") {
             const newTodo = {
                 id: Math.round(Math.random() * 1000),
-                text: enterTodo,
-                checked: false,
+                title: enterTodo,
+                completed: false,
             };
-            this.setState({ todos: [...todos, newTodo], enterTodo: "" });
+            setTodos([...todos, newTodo]);
+            setEnterTodo("");
         }
     };
-
-    handleRemoveTodo = (todoId) => {
+    const handleRemoveTodo = (todoId) => {
         console.log(todoId);
-        const { todos } = this.state;
-
         const updatedTodos = todos.filter((todo) => todo.id != todoId);
-        console.log(updatedTodos);
-        this.setState({ todos: updatedTodos });
+
+        setTodos(updatedTodos);
     };
 
-    handleCheckTodo = (todoId, props) => {
-        const { todos } = this.state;
-        /*        const className = "line-through"; */
-        const checkTodo = todos.filter((todo) => todo.id == todoId);
-        console.log(checkTodo.className);
+    const handleCheckTodo = (todoId, checked) => {
+        console.log(todoId);
+        const newTodos = todos.map((todo) => {
+            if (todo.id === +todoId) {
+                return {
+                    ...todo,
+                    completed: checked,
+                };
+            }
+            return todo;
+        });
+        setTodos(newTodos);
+        /*console.log(newTodos);*/
     };
-    isEmptyTodo = () => this.state.todos.length === 0;
 
-    render = () => (
+    const isEmptyTodo = todos.length === 0;
+
+    if (loading) {
+        return "Loading ...";
+    }
+
+    return (
         <TodosComponent
-            OnAddTodo={this.hadleAddTodo}
-            OnEnterTodo={this.handleChangeEnterTodo}
-            OnRemoveTodo={this.handleRemoveTodo}
-            isEmptyTodo={this.isEmptyTodo()}
-            OnCheckTodo={this.handleCheckTodo}
-            {...this.state}
+            enterTodo={enterTodo}
+            OnAddTodo={hadleAddTodo}
+            OnEnterTodo={handleChangeEnterTodo}
+            OnRemoveTodo={handleRemoveTodo}
+            isEmptyTodo={isEmptyTodo}
+            OnCheckTodo={handleCheckTodo}
+            todos={todos}
 
-            /*  enterTodo={this.state.enterTodo}
-            todos={this.state.todos}
+            /*  enterTodo={state.enterTodo}
+            
             */
         />
     );
-}
+};
 
 export default Todos;

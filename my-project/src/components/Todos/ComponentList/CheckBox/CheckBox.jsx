@@ -1,12 +1,10 @@
-import { Checkbox } from "@material-tailwind/react";
-
-export default function CheckBox({ OnCheckTodo }) {
+export default function CheckBox({ id, completed, OnCheckTodo }) {
+    console.log(completed);
     return (
-        <Checkbox
-            onClick={(e) => {
-                const [_, id] = e.target.id;
-                OnCheckTodo(id);
-            }}
+        <input
+            checked={completed}
+            type="checkbox"
+            onChange={() => OnCheckTodo(id, !completed)}
         />
     );
 }
